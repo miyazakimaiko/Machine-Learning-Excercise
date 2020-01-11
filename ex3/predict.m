@@ -20,14 +20,16 @@ p = zeros(size(X, 1), 1);
 %       information see 'help max'. If your examples are in rows, then, you
 %       can use max(A, [], 2) to obtain the max for each row.
 %
+biasUnit1 = ones(size(X, 1), 1);
+XwithBias = [biasUnit1 X]; 
+A1 = sigmoid(XwithBias * Theta1');
 
+biasUnit2 = ones(size(A1, 1), 1);
+A1withBias = [biasUnit2 A1]; 
+A2 = sigmoid(A1withBias * Theta2');
 
-
-
-
-
-
-
+[max max_idx] = max(A2');
+p = max_idx';
 
 % =========================================================================
 

@@ -24,7 +24,7 @@ Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):en
 
 % Setup some useful variables
 m = size(X, 1);
-         
+yVec = zeros(num_labels, 1);
 % You need to return the following variables correctly 
 J = 0;
 Theta1_grad = zeros(size(Theta1));
@@ -62,24 +62,33 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+eye_matrix = eye(num_labels);
+y_matrix = eye_matrix(y,:);
 
+a1 = [ones(m,1), X];
+z2 = a1 * Theta1';
+a2 = [ones(rows(z2),1), sigmoid(z2)];
+z3 = a2 * Theta2';
+a3 = sigmoid(z3);
 
+J = sum(sum(-y_matrix.*log(a3) - (1-y_matrix).*log(1-a3))) / m;
 
+ThetaMinusBiases = sum(sum(Theta1(:,2:end).^2)) + sum(sum(Theta2(:,2:end).^2));
+J = J + lambda * ThetaMinusBiases / (2*m);
 
+d3 = a3 - y_matrix;
+d2 = d3 * Theta2(:,2:end) .*sigmoidGradient(z2);
 
+Delta1 = d2' * a1;
+Delta2 = d3' * a2;
 
+Theta1_grad = Delta1 / m;
+Theta2_grad = Delta2 / m;
 
-
-
-
-
-
-
-
-
-
-
-
+Theta1(:,1) = 0;
+Theta1_grad = Theta1_grad + Theta1 * lambda / m;
+Theta2(:,1) = 0;
+Theta2_grad = Theta2_grad + Theta2 * lambda / m;
 % -------------------------------------------------------------
 
 % =========================================================================

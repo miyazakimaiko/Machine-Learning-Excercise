@@ -19,16 +19,15 @@ grad = zeros(size(theta));
 %               You should set J to the cost and grad to the gradient.
 %
 
+h = X * theta;
+error = h-y;
+theta(1) = 0;
+UnregularlizedJ = sum(error.^2) / (2*m);
+J = UnregularlizedJ + sum(theta.^2) * (lambda/(2*m));
 
-
-
-
-
-
-
-
-
-
+UnregularizedGrad = (1/m) * (X'*error);
+grad = UnregularizedGrad + ((lambda/m) * theta);
+disp((lambda/m) * theta)
 
 % =========================================================================
 
